@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+use id_generator::IdGenerator;
 use machine::Machine;
 use object::Object;
 use recipe::Recipe;
@@ -7,6 +8,7 @@ use recipe::Recipe;
 mod machine;
 mod object;
 mod recipe;
+mod id_generator;
 
 fn main() {
     let furnace = Machine::new("furnace".to_string(), 2f64);
