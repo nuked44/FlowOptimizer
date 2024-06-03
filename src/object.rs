@@ -16,29 +16,31 @@ impl<'a> Object<'a> {
 
 impl<'a> fmt::Display for Object<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        println!("{}(Id: {}):", self.name, self.id);
+        writeln!(f, "{}(Id: {}):", self.name, self.id).unwrap();
         for (count, recipe) in self.recipes.iter().enumerate() {
-            println!(
+            writeln!(
+                f,
                 "Recipe {} for: {}x {}",
                 count + 1,
                 recipe.quantity,
                 self.name
-            );
+            )
+            .unwrap();
             match &recipe.ingredients {
                 IngredientMachine::Some(recipe, machine) => {
                     recipe.iter().for_each(|(ingredient, quantity)| {
-                        println!("{}x {}(Id: {})", quantity, ingredient.name, ingredient.id);
+                        writeln!(f, "{}x {}(Id: {})", quantity, ingredient.name, ingredient.id).unwrap();
                     });
-                    println!(
+                    writeln!(
+                        f,
                         "in {}(Id: {}) and it takes {}time units\n",
                         machine.name,
                         machine.id,
                         1f64 / machine.throughput_per_min
                     )
+                    .unwrap()
                 }
-                IngredientMachine::None => {
-                    println!("There is no recipe\n")
-                }
+                IngredientMachine::None => writeln!(f, "There is no recipe\n").unwrap(),
             }
         }
         write!(f, "")

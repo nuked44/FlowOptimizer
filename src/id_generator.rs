@@ -1,15 +1,14 @@
 use std::sync::Mutex;
 
-
 pub struct IdGenerator {
-    id: Mutex<usize>
+    id: Mutex<usize>,
 }
 
 impl IdGenerator {
     pub fn new() -> IdGenerator {
-        IdGenerator{
+        IdGenerator {
             // id 0 is reserved as empty struct
-            id: Mutex::new(1)
+            id: Mutex::new(1),
         }
     }
 
