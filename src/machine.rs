@@ -1,10 +1,10 @@
 pub struct Machine {
     pub name: String,
-    pub throughput: f64,
+    pub throughput_per_min: f64,
 }
 
 impl Machine {
-    pub fn new(name: String, throughput: f64) -> Machine {
-        Machine { name, throughput }
+    pub fn new(name: String, throughput_per_min: f64) -> Machine {
+        Machine { name, throughput_per_min }
     }
 }
