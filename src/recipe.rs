@@ -1,7 +1,7 @@
-use crate::{machine::Machine, object::Object};
+use crate::{item::Item, machine::Machine};
 
 pub enum IngredientMachine<'a> {
-    Some(Vec<(&'a Object<'a>, usize)>, Machine),
+    Some(Vec<(&'a Item<'a>, usize)>, &'a Machine),
     None,
 }
 
@@ -12,8 +12,8 @@ pub struct Recipe<'a> {
 }
 
 impl<'a> Recipe<'a> {
-    pub fn no_recipe() -> Vec<Recipe<'a>> {
-        vec![Recipe {
+    pub fn no_recipe() -> Vec<&'a Recipe<'a>> {
+        vec![&Recipe {
             id: 0,
             quantity: 0,
             ingredients: IngredientMachine::None,
@@ -23,8 +23,8 @@ impl<'a> Recipe<'a> {
     pub fn new_recipe(
         id: usize,
         quantity: usize,
-        ingredients: Vec<(&'a Object, usize)>,
-        machine: Machine,
+        ingredients: Vec<(&'a Item, usize)>,
+        machine: &'a Machine,
     ) -> Recipe<'a> {
         Recipe {
             id,
