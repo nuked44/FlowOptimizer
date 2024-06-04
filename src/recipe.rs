@@ -1,7 +1,7 @@
 use crate::{item::Item, machine::Machine};
 
 pub enum IngredientMachine<'a> {
-    Some(Vec<(&'a Item<'a>, usize)>, &'a Machine),
+    Some(Vec<(&'a Item<'a>, usize)>, Option<&'a Machine>),
     None,
 }
 
@@ -24,7 +24,7 @@ impl<'a> Recipe<'a> {
         id: usize,
         quantity: usize,
         ingredients: Vec<(&'a Item, usize)>,
-        machine: &'a Machine,
+        machine: Option<&'a Machine>,
     ) -> Recipe<'a> {
         Recipe {
             id,

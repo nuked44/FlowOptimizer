@@ -16,7 +16,7 @@ impl<'a> Item<'a> {
 
 impl<'a> fmt::Display for Item<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "{}(Id: {}):", self.name, self.id).unwrap();
+        writeln!(f, "{}(Id: {}):", self.name, self.id)?;
         for (count, recipe) in self.recipes.iter().enumerate() {
             writeln!(
                 f,
@@ -24,8 +24,7 @@ impl<'a> fmt::Display for Item<'a> {
                 count + 1,
                 recipe.quantity,
                 self.name
-            )
-            .unwrap();
+            )?;
             match &recipe.ingredients {
                 IngredientMachine::Some(recipe, machine) => {
                     for (ingredient, quantity) in recipe {
@@ -33,19 +32,19 @@ impl<'a> fmt::Display for Item<'a> {
                             f,
                             "{}x {}(Id: {})",
                             quantity, ingredient.name, ingredient.id
-                        )
-                        .unwrap();
+                        )?;
                     }
-                    writeln!(
-                        f,
-                        "in {}(Id: {}) and it takes {}time units\n",
-                        machine.name,
-                        machine.id,
-                        1f64 / machine.throughput_per_min
-                    )
-                    .unwrap();
+                    if let Some(machine) = machine {
+                        writeln!(
+                            f,
+                            "in {}(Id: {}) and it takes {}time units\n",
+                            machine.name,
+                            machine.id,
+                            1f64 / machine.throughput_per_tu
+                        )?;
+                    }
                 }
-                IngredientMachine::None => writeln!(f, "There is no recipe\n").unwrap(),
+                IngredientMachine::None => writeln!(f, "There is no recipe\n")?,
             }
         }
         write!(f, "")

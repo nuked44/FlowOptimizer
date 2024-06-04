@@ -7,7 +7,7 @@ pub struct IdGenerator {
 impl IdGenerator {
     pub fn new() -> IdGenerator {
         IdGenerator {
-            // id 0 is reserved as empty struct
+            // id 0 denotes no id
             id: Mutex::new(1),
         }
     }

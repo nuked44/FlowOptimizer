@@ -1,6 +1,7 @@
-use crate::{item::Item, machine::Machine, recipe::Recipe};
-
-use super::{ResultItem, ResultMachine, ResultRecipe, Serializer};
+use super::{
+    ResultItem, ResultMachine, ResultRecipe, SerializableItem, SerializableMachine,
+    SerializableRecipe, Serializer,
+};
 
 pub struct Json;
 
@@ -8,9 +9,9 @@ impl Serializer for Json {
     fn serialize(
         &self,
         path: &str,
-        items: Option<Vec<&Item>>,
-        machines: Option<Vec<&Machine>>,
-        recipes: Option<Vec<&Recipe>>,
+        items: Option<Vec<SerializableItem>>,
+        machines: Option<Vec<Option<SerializableMachine>>>,
+        recipes: Option<Vec<SerializableRecipe>>,
     ) -> Result<(), std::io::Error> {
         Ok(())
     }

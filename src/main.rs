@@ -7,7 +7,7 @@ use config::Config;
 use frontend::{cli::Cli, Frontend};
 use id_generator::IdGenerator;
 use item::Item;
-use machine::Machine;
+use machine::{Machine, MachineManager};
 use recipe::Recipe;
 use serializer::{json::Json, Serializer};
 
@@ -26,16 +26,23 @@ fn main() -> Result<(), Error> {
     let object_id_generator = IdGenerator::new();
     let recipe_id_generator = IdGenerator::new();
 
-    let furnace = Machine::new(
+
+    // === Dummy Machines ===
+    let mut machine_manager = MachineManager::new();
+
+    let furnace = machine_manager.new_machine(
         machine_id_generator.generate_id(),
         "furnace".to_string(),
         2f64,
     );
-    let blast_furnace = Machine::new(
+    let blast_furnace = machine_manager.new_machine(
         machine_id_generator.generate_id(),
         "blastfurnace".to_string(),
         20f64,
     );
+
+
+    // === Dummy Items ===
 
     let coal = Item::new(
         object_id_generator.generate_id(),
@@ -48,20 +55,24 @@ fn main() -> Result<(), Error> {
         Recipe::no_recipe(),
     );
 
+
+    // === Dummy Repipes ===
     let iron_recipe_furnace = Recipe::new_recipe(
         recipe_id_generator.generate_id(),
         5,
         vec![(&coal, 2), (&iron_ore, 5)],
-        &furnace,
+        machine_manager.find_by_id(furnace),
     );
 
     let iron_recipe_blast_furnace = Recipe::new_recipe(
         recipe_id_generator.generate_id(),
         10,
         vec![(&coal, 2), (&iron_ore, 10)],
-        &blast_furnace,
+        machine_manager.find_by_id(blast_furnace),
     );
 
+
+    // === Dummy Product ===
     let iron = Item::new(
         object_id_generator.generate_id(),
         "iron".to_string(),
@@ -74,9 +85,9 @@ fn main() -> Result<(), Error> {
     let json_serializer = Json;
     json_serializer.serialize(
         &config.savepath,
-        Some(vec![&coal, &iron_ore, &iron]),
-        Some(vec![&furnace, &blast_furnace]),
-        Some(vec![&iron_recipe_furnace, &iron_recipe_blast_furnace]),
+        Some(vec![(&coal).into(), (&iron_ore).into(), (&iron).into()]),
+        Some(vec![(&machine_manager.find_by_id(furnace)).into(), (&machine_manager.find_by_id(blast_furnace)).into()]),
+        Some(vec![(&iron_recipe_furnace).into(), (&iron_recipe_blast_furnace).into()]),
     )?;
 
     println!("{}", config.savepath);
