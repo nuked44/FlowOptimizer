@@ -36,9 +36,9 @@ pub struct SerializableItem {
 impl From<&Item<'_>> for SerializableItem {
     fn from(item: &Item<'_>) -> SerializableItem {
         SerializableItem {
-            id: item.id.clone(),
+            id: item.id,
             name: item.name.clone(),
-            recipe_ids: item.recipes.iter().map(|r| r.id.clone()).collect(),
+            recipe_ids: item.recipes.iter().map(|r| r.id).collect(),
         }
     }
 }
@@ -52,9 +52,9 @@ pub struct SerializableMachine {
 impl From<&Machine> for SerializableMachine {
     fn from(machine: &Machine) -> SerializableMachine {
         SerializableMachine {
-            id: machine.id.clone(),
+            id: machine.id,
             name: machine.name.clone(),
-            throughput_per_tu: machine.throughput_per_tu.clone(),
+            throughput_per_tu: machine.throughput_per_tu,
         }
     }
 }
@@ -69,17 +69,17 @@ pub struct SerializableRecipe {
 impl From<&Recipe<'_>> for SerializableRecipe {
     fn from(recipe: &Recipe) -> SerializableRecipe {
         SerializableRecipe {
-            id: recipe.id.clone(),
-            quantity: recipe.quantity.clone(),
+            id: recipe.id,
+            quantity: recipe.quantity,
             ingredient_ids_and_quantity: match &recipe.ingredients {
                 IngredientMachine::Some(ingredients, _) => ingredients
                     .iter()
-                    .map(|item| (item.0.id.clone(), item.1.clone()))
+                    .map(|item| (item.0.id, item.1))
                     .collect(),
                 IngredientMachine::None => Vec::new(),
             },
             machine_ids: match &recipe.ingredients {
-                IngredientMachine::Some(_, machine) => machine.id.clone(),
+                IngredientMachine::Some(_, machine) => machine.id,
                 IngredientMachine::None => 0,
             },
         }

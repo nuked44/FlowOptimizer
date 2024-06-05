@@ -39,7 +39,7 @@ impl fmt::Display for Manager {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "There are {} machines", self.count)?;
         for machine in &self.machines {
-            writeln!(f, "{}", machine)?;
+            writeln!(f, "{machine}")?;
         }
         write!(f, "")
     }

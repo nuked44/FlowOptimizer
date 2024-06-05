@@ -94,9 +94,9 @@ fn main() -> Result<(), Error> {
         ]),
     )?;
 
-    //println!("{}", config.savepath);
+    println!("{}", config.savepath);
 
-    print!("{}", machine_manager);
+    print!("{machine_manager}");
 
     Ok(())
 }
