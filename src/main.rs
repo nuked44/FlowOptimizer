@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
+#![allow(unused_imports)]
 
 use std::io::Error;
 
@@ -7,7 +8,6 @@ use config::Config;
 use frontend::{cli::Cli, Frontend};
 use id_generator::IdGenerator;
 use item::Item;
-use machine::MachineManager;
 use recipe::Recipe;
 use serializer::{json::Json, Serializer};
 
@@ -27,7 +27,7 @@ fn main() -> Result<(), Error> {
     let recipe_id_generator = IdGenerator::new();
 
     // === Dummy Machines ===
-    let mut machine_manager = MachineManager::new();
+    let mut machine_manager = machine::Manager::new();
 
     let furnace = machine_manager.new_machine(
         machine_id_generator.generate_id(),
@@ -76,7 +76,7 @@ fn main() -> Result<(), Error> {
     );
 
     let cli_frontend = Cli;
-    cli_frontend.display_message(&iron);
+    //cli_frontend.display_message(&iron);
 
     //let furnace: Option<SerializableMachine> = Some((&machine_manager.find_by_id(furnace)).into());
 
@@ -94,7 +94,9 @@ fn main() -> Result<(), Error> {
         ]),
     )?;
 
-    println!("{}", config.savepath);
+    //println!("{}", config.savepath);
+
+    print!("{}", machine_manager);
 
     Ok(())
 }

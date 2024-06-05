@@ -49,19 +49,12 @@ pub struct SerializableMachine {
     pub throughput_per_tu: f64,
 }
 
-impl From<Option<&Machine>> for SerializableMachine {
-    fn from(machine: Option<&Machine>) -> SerializableMachine {
-        if let Some(machine) = machine {
-            return SerializableMachine {
-                id: machine.id.clone(),
-                name: machine.name.clone(),
-                throughput_per_tu: machine.throughput_per_tu.clone(),
-            };
-        }
+impl From<&Machine> for SerializableMachine {
+    fn from(machine: &Machine) -> SerializableMachine {
         SerializableMachine {
-            id: 0,
-            name: "Epmty Machine".to_string(),
-            throughput_per_tu: 0f64,
+            id: machine.id.clone(),
+            name: machine.name.clone(),
+            throughput_per_tu: machine.throughput_per_tu.clone(),
         }
     }
 }
@@ -79,19 +72,14 @@ impl From<&Recipe<'_>> for SerializableRecipe {
             id: recipe.id.clone(),
             quantity: recipe.quantity.clone(),
             ingredient_ids_and_quantity: match &recipe.ingredients {
-                IngredientMachine::Some(ingredients, _) => {
-                    ingredients.iter().map(|item| (item.0.id.clone(), item.1.clone())).collect()
-                }
+                IngredientMachine::Some(ingredients, _) => ingredients
+                    .iter()
+                    .map(|item| (item.0.id.clone(), item.1.clone()))
+                    .collect(),
                 IngredientMachine::None => Vec::new(),
             },
             machine_ids: match &recipe.ingredients {
-                IngredientMachine::Some(_, machine) => {
-                    if let Some(machine) = machine {
-                        machine.id.clone()
-                    } else {
-                        0
-                    }
-                }
+                IngredientMachine::Some(_, machine) => machine.id.clone(),
                 IngredientMachine::None => 0,
             },
         }

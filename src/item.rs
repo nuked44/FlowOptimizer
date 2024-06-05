@@ -34,15 +34,13 @@ impl<'a> fmt::Display for Item<'a> {
                             quantity, ingredient.name, ingredient.id
                         )?;
                     }
-                    if let Some(machine) = machine {
-                        writeln!(
-                            f,
-                            "in {}(Id: {}) and it takes {}time units\n",
-                            machine.name,
-                            machine.id,
-                            1f64 / machine.throughput_per_tu
-                        )?;
-                    }
+                    writeln!(
+                        f,
+                        "in {}(Id: {}) and it takes {}time units\n",
+                        machine.name,
+                        machine.id,
+                        1f64 / machine.throughput_per_tu
+                    )?;
                 }
                 IngredientMachine::None => writeln!(f, "There is no recipe\n")?,
             }
