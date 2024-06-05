@@ -7,7 +7,7 @@ use config::Config;
 use frontend::{cli::Cli, Frontend};
 use id_generator::IdGenerator;
 use item::Item;
-use machine::{Machine, MachineManager};
+use machine::MachineManager;
 use recipe::Recipe;
 use serializer::{json::Json, Serializer};
 
@@ -26,7 +26,6 @@ fn main() -> Result<(), Error> {
     let object_id_generator = IdGenerator::new();
     let recipe_id_generator = IdGenerator::new();
 
-
     // === Dummy Machines ===
     let mut machine_manager = MachineManager::new();
 
@@ -41,7 +40,6 @@ fn main() -> Result<(), Error> {
         20f64,
     );
 
-
     // === Dummy Items ===
 
     let coal = Item::new(
@@ -54,7 +52,6 @@ fn main() -> Result<(), Error> {
         "iron ore".to_string(),
         Recipe::no_recipe(),
     );
-
 
     // === Dummy Repipes ===
     let iron_recipe_furnace = Recipe::new_recipe(
@@ -71,7 +68,6 @@ fn main() -> Result<(), Error> {
         machine_manager.find_by_id(blast_furnace),
     );
 
-
     // === Dummy Product ===
     let iron = Item::new(
         object_id_generator.generate_id(),
@@ -82,12 +78,20 @@ fn main() -> Result<(), Error> {
     let cli_frontend = Cli;
     cli_frontend.display_message(&iron);
 
+    //let furnace: Option<SerializableMachine> = Some((&machine_manager.find_by_id(furnace)).into());
+
     let json_serializer = Json;
     json_serializer.serialize(
         &config.savepath,
         Some(vec![(&coal).into(), (&iron_ore).into(), (&iron).into()]),
-        Some(vec![(&machine_manager.find_by_id(furnace)).into(), (&machine_manager.find_by_id(blast_furnace)).into()]),
-        Some(vec![(&iron_recipe_furnace).into(), (&iron_recipe_blast_furnace).into()]),
+        Some(vec![
+            Some(machine_manager.find_by_id(furnace).into()),
+            Some(machine_manager.find_by_id(blast_furnace).into()),
+        ]),
+        Some(vec![
+            (&iron_recipe_furnace).into(),
+            (&iron_recipe_blast_furnace).into(),
+        ]),
     )?;
 
     println!("{}", config.savepath);

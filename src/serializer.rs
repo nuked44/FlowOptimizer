@@ -36,9 +36,9 @@ pub struct SerializableItem {
 impl From<&Item<'_>> for SerializableItem {
     fn from(item: &Item<'_>) -> SerializableItem {
         SerializableItem {
-            id: item.id,
+            id: item.id.clone(),
             name: item.name.clone(),
-            recipe_ids: item.recipes.iter().map(|r| r.id).collect(),
+            recipe_ids: item.recipes.iter().map(|r| r.id.clone()).collect(),
         }
     }
 }
@@ -53,9 +53,9 @@ impl From<Option<&Machine>> for SerializableMachine {
     fn from(machine: Option<&Machine>) -> SerializableMachine {
         if let Some(machine) = machine {
             return SerializableMachine {
-                id: machine.id,
+                id: machine.id.clone(),
                 name: machine.name.clone(),
-                throughput_per_tu: machine.throughput_per_tu,
+                throughput_per_tu: machine.throughput_per_tu.clone(),
             };
         }
         SerializableMachine {
@@ -63,12 +63,6 @@ impl From<Option<&Machine>> for SerializableMachine {
             name: "Epmty Machine".to_string(),
             throughput_per_tu: 0f64,
         }
-    }
-}
-
-impl From<&Option<&Machine>> for SerializableMachine {
-    fn from(machine: &Option<&Machine>) -> SerializableMachine {
-        SerializableMachine::from(machine.as_ref().cloned())
     }
 }
 
@@ -82,18 +76,18 @@ pub struct SerializableRecipe {
 impl From<&Recipe<'_>> for SerializableRecipe {
     fn from(recipe: &Recipe) -> SerializableRecipe {
         SerializableRecipe {
-            id: recipe.id,
-            quantity: recipe.quantity,
+            id: recipe.id.clone(),
+            quantity: recipe.quantity.clone(),
             ingredient_ids_and_quantity: match &recipe.ingredients {
                 IngredientMachine::Some(ingredients, _) => {
-                    ingredients.iter().map(|item| (item.0.id, item.1)).collect()
+                    ingredients.iter().map(|item| (item.0.id.clone(), item.1.clone())).collect()
                 }
                 IngredientMachine::None => Vec::new(),
             },
             machine_ids: match &recipe.ingredients {
                 IngredientMachine::Some(_, machine) => {
                     if let Some(machine) = machine {
-                        machine.id
+                        machine.id.clone()
                     } else {
                         0
                     }

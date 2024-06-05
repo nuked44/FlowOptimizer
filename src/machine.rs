@@ -24,12 +24,12 @@ impl MachineManager {
         id
     }
 
-    pub fn find_by_id(self, id: usize) -> Option<&'static Machine> {
+    pub fn find_by_id(&self, id: usize) -> Option<&Machine> {
         if id > self.count {
             return None;
         }
-        match self.machines[id] {
-            Some(machine) => Some(&machine),
+        match &self.machines[id] {
+            Some(machine) => Some(machine),
             None => None,
         }
     } 
